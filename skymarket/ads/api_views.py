@@ -1,8 +1,11 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from .filters import AdTitleFilter
 from .models import Ad, Comment
 from .pagination import AdPagination
+from .permissions import IsOwner, IsAdmin
 from .serializers import AdSerializer, AdDetailSerializer, CommentSerializer
 
 
@@ -12,6 +15,8 @@ class AdListAPIView(generics.ListAPIView):
     """
     serializer_class = AdSerializer
     pagination_class = AdPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = AdTitleFilter
     permission_classes = [AllowAny]
 
     def get_queryset(self):
@@ -58,7 +63,7 @@ class AdUpdateAPIView(generics.UpdateAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdDetailSerializer
     lookup_field = 'id'
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
 
 
 class AdDeleteAPIView(generics.DestroyAPIView):
@@ -67,7 +72,7 @@ class AdDeleteAPIView(generics.DestroyAPIView):
     """
     queryset = Ad.objects.all()
     lookup_field = 'id'
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
 
 
 # Comments generics
@@ -122,7 +127,7 @@ class CommentUpdateAPIView(generics.UpdateAPIView):
     serializer_class = CommentSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'commentId'
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
 
 
 class CommentDeleteAPIView(generics.DestroyAPIView):
@@ -132,4 +137,4 @@ class CommentDeleteAPIView(generics.DestroyAPIView):
     queryset = Comment.objects.all()
     lookup_field = 'id'
     lookup_url_kwarg = 'commentId'
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
