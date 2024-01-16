@@ -1,9 +1,9 @@
-FROM node:13.12.0-alpine as build
+FROM node:21-alpine as build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install -g npm@7.24.0
-RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
-RUN npm i
+RUN apk add --no-cache python3 make g++ && rm -rf /var/cache/apk/*
+RUN npm rebuild node-sass
+RUN npm install
+RUN npm ci
 COPY . ./
-RUN ls -la
 CMD npm run build
