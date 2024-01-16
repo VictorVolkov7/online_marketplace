@@ -1,3 +1,4 @@
+import React from 'react';
 import { createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
@@ -18,13 +19,13 @@ export const AuthProvider = ({ children }) => {
       : null
   );
   let [loading, setLoading] = useState(true);
-  const BASE_URL = "http://127.0.0.1:8000/api";
+  const BASE_URL = "http://127.0.0.1:8001";
 
   const history = useHistory();
   //login
   let loginUser = async (e) => {
     e.preventDefault();
-    let response = await fetch(`${BASE_URL}/token/`, {
+    let response = await fetch(`${BASE_URL}/jwt/create/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
