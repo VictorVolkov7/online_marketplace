@@ -71,6 +71,7 @@ class AdDeleteAPIView(generics.DestroyAPIView):
     API endpoint for deleting the Ad.
     """
     queryset = Ad.objects.all()
+    serializer_class = AdDetailSerializer
     lookup_field = 'id'
     permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
 
@@ -135,6 +136,7 @@ class CommentDeleteAPIView(generics.DestroyAPIView):
     API endpoint for deleting the Comment.
     """
     queryset = Comment.objects.all()
+    serializer_class = AdDetailSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'commentId'
     permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
