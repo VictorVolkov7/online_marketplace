@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "corsheaders",
     "djoser",
-    'phonenumber_field',
+    "phonenumber_field",
+    "django_filters",
 
     "users",
     "ads",
