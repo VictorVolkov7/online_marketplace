@@ -102,7 +102,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+.env.docker
+skymarket/.env
 .venv
 env/
 venv/
@@ -130,3 +131,6 @@ dmypy.json
 .DS_Store
 .idea/
 ./django_static
+
+# Node modules
+/frontend_react/node_modules
