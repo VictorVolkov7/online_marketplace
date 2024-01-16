@@ -76,7 +76,7 @@ function Registration() {
             value={values.email || ""}
             name="email"
             type="email"
-            pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+            pattern={'^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$'}
             className="form__email form__input"
             onChange={handleChangeInput}
           />
@@ -115,8 +115,8 @@ function Registration() {
             value={values.phone || ""}
             title="Телефон"
             type="tel"
+            pattern={'/^(\\+?\\d{1,3}[-\\s]?)(\\(\\d{1,3}\\)|\\d{1,3})[-\\s]?\\d{1,4}[-\\s]?\\d{1,9}$/'}
             name="phone"
-            pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
             placeholder="+7(___)___-__-__"
             className="form__input"
             onChange={handleChangeInput}
