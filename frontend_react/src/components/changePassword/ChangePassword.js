@@ -10,8 +10,8 @@ function ChangePassword() {
   const { changePassword } = useContext(AuthContext);
   const match = useParams();
   const history = useHistory();
-  const uid = match.Ng;
-  const token = match.id;
+  const uid = match.uid;
+  const token = match.token;
 
   function handleChangeInput(e) {
     handleChange(e);
@@ -20,7 +20,7 @@ function ChangePassword() {
     }
   }
 
-  function heandlerSubmit() {
+  function handleSubmit() {
     changePassword({
       uid: uid,
       token: token,
@@ -32,7 +32,7 @@ function ChangePassword() {
 
   return (
     <LinkForm
-      onClick={heandlerSubmit}
+      onClick={handleSubmit}
       error={!isValid}
       disabled={!isValid}
       buttonName="Сохранить"
