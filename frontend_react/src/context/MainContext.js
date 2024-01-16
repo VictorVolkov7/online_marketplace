@@ -16,9 +16,9 @@ export const MainContextStates = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const api = useAxios();
   let { authTokens } = useContext(AuthContext);
-  const BASE_URL = "http://127.0.0.1:8000/api";
+  const BASE_URL = "http://127.0.0.1:8001";
   const BASE_URL_OPEN = `${BASE_URL}/ads/?`;
-  const BASE_URL_ADS = `/api/ads/?`;
+  const BASE_URL_ADS = `/ads/?`;
 
   //Open/close navigation when page's size max-width 840px
 
@@ -90,16 +90,16 @@ export const MainContextStates = ({ children }) => {
       .then(handleResponse);
   };
   //comments
-  const getComments = async (ad_pk) => {
-    return await api.get(`${BASE_URL}/ads/${ad_pk}/comments/`);
+  const getComments = async (id) => {
+    return await api.get(`${BASE_URL}/ads/${id}/comments/`);
   };
 
-  const getComment = async (adId, commentId) => {
-    return await api.get(`${BASE_URL}/ads/${adId}/comments/${commentId}/`);
+  const getComment = async (id, commentId) => {
+    return await api.get(`${BASE_URL}/ads/${id}/comments/${commentId}/`);
   };
 
   const addComment = async (id, text) => {
-    return await fetch(`${BASE_URL}/ads/${id}/comments/`, {
+    return await fetch(`${BASE_URL}/ads/${id}/comments/create/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,8 +109,8 @@ export const MainContextStates = ({ children }) => {
     }).then(handleResponse);
   };
 
-  const editComment = async (adId, commentId, data) => {
-    return await fetch(`${BASE_URL}/ads/${adId}/comments/${commentId}/`, {
+  const editComment = async (id, commentId, data) => {
+    return await fetch(`${BASE_URL}/ads/${id}/comments/update/${commentId}/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -120,8 +120,8 @@ export const MainContextStates = ({ children }) => {
     }).then(handleResponse);
   };
 
-  const deleteComment = async (adId, commentId) => {
-    return await fetch(`${BASE_URL}/ads/${adId}/comments/${commentId}/`, {
+  const deleteComment = async (id, commentId) => {
+    return await fetch(`${BASE_URL}/ads/${id}/comments/delete/${commentId}/`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -166,14 +166,14 @@ export const MainContextStates = ({ children }) => {
 
   //add new ad
   const addAd = async ({ image, title, price, description }) => {
-    const url = "http://127.0.0.1:8000/api/ads/";
+    const url = "http://127.0.0.1:8001/ads/create/";
     const formData = new FormData();
     formData.append("image", image);
     formData.append("title", `${title}`);
     formData.append("price", `${price}`);
     formData.append("description", `${description}`);
 
-    return await await axios
+    return await axios
       .post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -185,7 +185,7 @@ export const MainContextStates = ({ children }) => {
 
   //edit ad
   const editAdd = async (id, data) => {
-    return await fetch(`${BASE_URL}/ads/${id}/`, {
+    return await fetch(`${BASE_URL}/ads/update/${id}/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -199,7 +199,7 @@ export const MainContextStates = ({ children }) => {
     const formData = new FormData();
     formData.append("image", image);
     return await axios
-      .patch(`${BASE_URL}/ads/${id}/`, formData, {
+      .patch(`${BASE_URL}/ads/update/${id}/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + String(authTokens.access),
@@ -210,7 +210,7 @@ export const MainContextStates = ({ children }) => {
 
   //delite add
   const deleteAdd = async (id) => {
-    return await fetch(`${BASE_URL}/ads/${id}/`, {
+    return await fetch(`${BASE_URL}/ads/delete/${id}/`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

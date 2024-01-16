@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode";
 import dayjs from 'dayjs'
 
 
-const baseURL = 'http://127.0.0.1:8000'
+const baseURL = 'http://127.0.0.1:8001'
 
 
 let authTokens = localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null
@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(async req => {
 
     if(!isExpired) return req
 
-    const response = await axios.post(`${baseURL}/refresh/`, {
+    const response = await axios.post(`${baseURL}/jwt/refresh/`, {
         refresh: authTokens.refresh
       });
 

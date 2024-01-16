@@ -5,13 +5,16 @@ services:
     image: postgres:12.4-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: skymarket
-      POSTGRES_PASSWORD: skymarket
-      POSTGRES_DB: skymarket
+    env_file:
+      - ../skymarket/.env
     restart: always
-    ports:
-    - "5432:5432"
+    expose:
+      - '5432'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   frontend:
     build: ../frontend_react/.
@@ -19,6 +22,20 @@ services:
       - frontend:/app/build
     depends_on:
       - db
+
+  backend:
+    build: ../skymarket/.
+    command: >
+      bash -c "python manage.py makemigrations
+      && python manage.py migrate
+      && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - '8001:8000'
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ../skymarket/.env.docker:/code/.env
 
   nginx:
     image: nginx:1.19.3
