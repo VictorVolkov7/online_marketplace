@@ -1,12 +1,18 @@
-from django.contrib import admin
-from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-
-# TODO здесь необходимо подклюючит нужные нам urls к проекту
+from django.contrib import admin
+from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
-    path("api/admin/", admin.site.urls),
-    path("api/redoc-tasks/", include("redoc.urls")),
-]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # admin panel django
+    path("admin/", admin.site.urls),
+
+    # apps routing
+    path('', include('users.urls', namespace='user')),
+    path('', include('ads.urls', namespace='ads')),
+
+    # drf spectacular documentation
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
