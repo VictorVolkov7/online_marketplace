@@ -54,9 +54,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=timezone.now,
         verbose_name=_('date joined'),
     )
+    image = models.ImageField(
+        upload_to='users/',
+        null=True,
+        blank=True,
+        verbose_name=_('image')
+    )
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone', "role"]
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone', "role", "image"]
 
     objects = UserManager()
 
