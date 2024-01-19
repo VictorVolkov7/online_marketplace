@@ -1,14 +1,26 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .filters import AdTitleFilter
 from .models import Ad, Comment
 from .pagination import AdPagination
 from .permissions import IsOwner, IsAdmin
-from .serializers import AdSerializer, AdDetailSerializer, CommentSerializer
+from .serializers import AdSerializer, AdDetailSerializer, CommentSerializer, CommonDetailSerializer, \
+    CommonDetailAndStatusSerializer
 
 
+@extend_schema(tags=["Ad"])
+@extend_schema(
+    summary="API endpoint for viewing the Ad list.",
+    responses={
+        status.HTTP_200_OK: AdSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+        status.HTTP_405_METHOD_NOT_ALLOWED: CommonDetailSerializer,
+    }
+    )
 class AdListAPIView(generics.ListAPIView):
     """
     API endpoint for viewing the Ad list.
@@ -30,6 +42,16 @@ class AdListAPIView(generics.ListAPIView):
             return Ad.objects.all()
 
 
+@extend_schema(tags=["Ad"])
+@extend_schema(
+    summary="API endpoint for viewing the Ad detail.",
+    responses={
+        status.HTTP_200_OK: AdDetailSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+        status.HTTP_405_METHOD_NOT_ALLOWED: CommonDetailSerializer,
+    }
+    )
 class AdDetailAPIView(generics.RetrieveAPIView):
     """
     API endpoint for viewing the Ad detail.
@@ -40,6 +62,17 @@ class AdDetailAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
 
+@extend_schema(tags=["Ad"])
+@extend_schema(
+    summary="API endpoint for creating the Ad.",
+    responses={
+        status.HTTP_201_CREATED: AdSerializer,
+        status.HTTP_400_BAD_REQUEST: CommonDetailSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_403_FORBIDDEN: CommonDetailAndStatusSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+    }
+    )
 class AdCreateAPIView(generics.CreateAPIView):
     """
     API endpoint for creating the Ad.
@@ -56,6 +89,16 @@ class AdCreateAPIView(generics.CreateAPIView):
         ad.save()
 
 
+@extend_schema(tags=["Ad"])
+@extend_schema(
+    summary="API endpoint for updating the Ad.",
+    responses={
+        status.HTTP_200_OK: AdDetailSerializer,
+        status.HTTP_400_BAD_REQUEST: CommonDetailSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+    }
+    )
 class AdUpdateAPIView(generics.UpdateAPIView):
     """
     API endpoint for updating the Ad.
@@ -66,6 +109,16 @@ class AdUpdateAPIView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
 
 
+@extend_schema(tags=["Ad"])
+@extend_schema(
+    summary="API endpoint for deleting the Ad.",
+    responses={
+        status.HTTP_204_NO_CONTENT: '',
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_403_FORBIDDEN: CommonDetailAndStatusSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+    }
+    )
 class AdDeleteAPIView(generics.DestroyAPIView):
     """
     API endpoint for deleting the Ad.
@@ -77,6 +130,16 @@ class AdDeleteAPIView(generics.DestroyAPIView):
 
 
 # Comments generics
+@extend_schema(tags=["Comment"])
+@extend_schema(
+    summary="API endpoint for viewing the Comment list.",
+    responses={
+        status.HTTP_200_OK: CommentSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+        status.HTTP_405_METHOD_NOT_ALLOWED: CommonDetailSerializer,
+    }
+    )
 class CommentListAPIView(generics.ListAPIView):
     """
     API endpoint for viewing the Comment list.
@@ -92,6 +155,16 @@ class CommentListAPIView(generics.ListAPIView):
         return Comment.objects.filter(ad=self.kwargs.get('id'))
 
 
+@extend_schema(tags=["Comment"])
+@extend_schema(
+    summary="API endpoint for viewing the Comment detail.",
+    responses={
+        status.HTTP_200_OK: CommentSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+        status.HTTP_405_METHOD_NOT_ALLOWED: CommonDetailSerializer,
+    }
+    )
 class CommentDetailAPIView(generics.RetrieveAPIView):
     """
     API endpoint for viewing the Comment detail.
@@ -103,6 +176,17 @@ class CommentDetailAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
 
+@extend_schema(tags=["Comment"])
+@extend_schema(
+    summary="API endpoint for creating the Comment.",
+    responses={
+        status.HTTP_201_CREATED: CommentSerializer,
+        status.HTTP_400_BAD_REQUEST: CommonDetailSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_403_FORBIDDEN: CommonDetailAndStatusSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+    }
+    )
 class CommentCreateAPIView(generics.CreateAPIView):
     """
     API endpoint for creating the Comment.
@@ -120,6 +204,16 @@ class CommentCreateAPIView(generics.CreateAPIView):
         comment.save()
 
 
+@extend_schema(tags=["Comment"])
+@extend_schema(
+    summary="API endpoint for updating the Comment.",
+    responses={
+        status.HTTP_200_OK: CommentSerializer,
+        status.HTTP_400_BAD_REQUEST: CommonDetailSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+    }
+    )
 class CommentUpdateAPIView(generics.UpdateAPIView):
     """
     API endpoint for updating the Comment.
@@ -131,6 +225,17 @@ class CommentUpdateAPIView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsOwner | IsAdmin]
 
 
+@extend_schema(tags=["Comment"])
+@extend_schema(
+    summary="API endpoint for deleting the Comment.",
+    responses={
+        status.HTTP_201_CREATED: AdDetailSerializer,
+        status.HTTP_400_BAD_REQUEST: CommonDetailSerializer,
+        status.HTTP_401_UNAUTHORIZED: CommonDetailSerializer,
+        status.HTTP_403_FORBIDDEN: CommonDetailAndStatusSerializer,
+        status.HTTP_404_NOT_FOUND: CommonDetailSerializer,
+    }
+    )
 class CommentDeleteAPIView(generics.DestroyAPIView):
     """
     API endpoint for deleting the Comment.
