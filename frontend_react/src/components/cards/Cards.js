@@ -21,13 +21,13 @@ function Cards({ ads }) {
           {ads.map((card) => {
             return (
               <Link
-                key={card.pk}
-                to={user ? `ads/${card.pk}` : "/"}
+                key={card.id}
+                to={user ? `ads/${card.id}` : "/"}
                 className="cards__link"
               >
                 <Card
-                  key={card.pk}
-                  pk={card.pk}
+                  key={card.id}
+                  pk={card.id}
                   title={card.title}
                   image={card.image}
                   price={card.price}
