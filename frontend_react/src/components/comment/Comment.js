@@ -69,10 +69,10 @@ function Comment(comment, { setComments }) {
             className="comment-buttons"
             classButton="comment-button"
             onOpen={
-              currentCommentid === getComm.pk ? handleEditCommPopupOpen : null
+              currentCommentid === getComm.id ? handleEditCommPopupOpen : null
             }
             onSubmit={onDelete}
-            key={comment.pk}
+            key={comment.id}
           />
         ) : null}
         <EditCommentPopup
@@ -84,8 +84,8 @@ function Comment(comment, { setComments }) {
           userId={user.user_id}
           commentUserId={comment.userId}
           commentId={comment.commentId}
-          currentComId={getComm.pk}
-          key={comment.pk}
+          currentComId={getComm.id}
+          key={comment.id}
         />
       </div>
     </li>
