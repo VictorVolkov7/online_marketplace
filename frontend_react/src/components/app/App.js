@@ -64,12 +64,12 @@ function App() {
         <Route exact path="/sign-in/email/" component={EmailLink} />
         <Route
           exact
-          path="/password/reset/confirm/:Ng/:id/"
+          path="/users/reset_password_confirm/:uid/:token/"
           component={ChangePassword}
         />
         <PrivateRoute exact path="/profile/" component={UserProfile} />
         <PrivateRoute exact path="/ads/:id" component={SinglePage} />
-        <PrivateRoute exact path="/profile/ads/:id/" component={SinglePage} />
+        <PrivateRoute exact path="/ads/:id/" component={SinglePage} />
         <PrivateRoute exact path="/newAd" component={NewAdd} />
         <Route exact path="/" component={Main} />
       </Switch>

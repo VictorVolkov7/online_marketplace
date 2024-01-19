@@ -40,7 +40,7 @@ function SinglePage() {
           setComments(commentsData.data.results);
           setAd(adData.data);
         })
-        .catch((error) => console.log("error", error))
+        .catch((error) => console.log("ошибка", error))
         .finally(() => setTimeout(() => setIsLoading(false), 700));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,7 +50,7 @@ function SinglePage() {
     debugger;
     editAdd(id, data)
       .then((data) => {
-        setAds((ads) => ads.filter((i) => (i.id === ad.pk ? data : null)));
+        setAds((ads) => ads.filter((i) => (i.id === ad.id ? data : null)));
         window.location.reload();
       })
       .catch((error) => console.log("error", error));
@@ -59,7 +59,7 @@ function SinglePage() {
   function handleEditPhotoAdd(image) {
     editAddPhoto(id, image)
       .then((image) => {
-        setAds((ads) => ads.filter((i) => (i.id === ad.pk ? image : null)));
+        setAds((ads) => ads.filter((i) => (i.id === ad.id ? image : null)));
         window.location.reload();
       })
       .catch((error) => console.log("error", error));
@@ -95,9 +95,9 @@ function SinglePage() {
             <div className="cardInformation__container">
               {ad.image === null ? (
                 <div className="cardInformation__img-null">
-                  {user.user_id === ad.author_id ? (
+                  {ad.author && user.user_id === ad.author.id ? (
                     <button
-                      onClick={handleOpenEditPhotoPopup}
+                      onClick={() => handleOpenEditPhotoPopup()}
                       className="cardInformation__img-change"
                       type="button"
                     />
@@ -108,16 +108,16 @@ function SinglePage() {
                   style={{ backgroundImage: `url(${ad.image})` }}
                   className="cardInformation__img"
                 >
-                  {user.user_id === ad.author_id ? (
+                  {ad.author && user.user_id === ad.author.id ? (
                     <button
-                      onClick={handleOpenEditPhotoPopup}
+                      onClick={() => handleOpenEditPhotoPopup()}
                       className="cardInformation__img-change"
                       type="button"
                     />
                   ) : null}
                 </div>
               )}
-              {user.user_id !== ad.author_id ? null : (
+              {ad.author && user.user_id !== ad.author.id ? null : (
                 <Buttons
                   user={user}
                   product={ad}
@@ -128,14 +128,18 @@ function SinglePage() {
                 />
               )}
               <div className="cardInformation__box">
-                <div className="cardInformation__box_second">
-                  <p className="cardInformation__tel">{ad.phone}</p>
-                  <p className="cardInformation__tel">{ad.author_first_name}</p>
-                </div>
-                <p className="cardInformation__price">{ad.price} &#8381;</p>
+                <p className="cardInformation__price">Цена:{ad.price} &#8381;</p>
               </div>
               <div className="cardInformation__box">
                 <p className="cardInformation__description">{ad.description}</p>
+              </div>
+              <div className="cardInformation__box">
+                {ad.author && ad.author.phone && ad.author.first_name ? (
+                  <div className="cardInformation__box_second">
+                    <p className="cardInformation__tel">{ad.author.phone}</p>
+                    <p className="cardInformation__tel">{ad.author.first_name}</p>
+                  </div>
+                ) : null}
               </div>
               <CommentContainer
                 comments={comments}

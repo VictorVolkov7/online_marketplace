@@ -90,16 +90,16 @@ export const MainContextStates = ({ children }) => {
       .then(handleResponse);
   };
   //comments
-  const getComments = async (id) => {
-    return await api.get(`${BASE_URL}/ads/${id}/comments/`);
+  const getComments = async (adId) => {
+    return await api.get(`${BASE_URL}/ads/${adId}/comments/`);
   };
 
-  const getComment = async (id, commentId) => {
-    return await api.get(`${BASE_URL}/ads/${id}/comments/${commentId}/`);
+  const getComment = async (adId, commentId) => {
+    return await api.get(`${BASE_URL}/ads/${adId}/comments/${commentId}/`);
   };
 
-  const addComment = async (id, text) => {
-    return await fetch(`${BASE_URL}/ads/${id}/comments/create/`, {
+  const addComment = async (adId, text) => {
+    return await fetch(`${BASE_URL}/ads/${adId}/comments/create/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,8 +109,8 @@ export const MainContextStates = ({ children }) => {
     }).then(handleResponse);
   };
 
-  const editComment = async (id, commentId, data) => {
-    return await fetch(`${BASE_URL}/ads/${id}/comments/update/${commentId}/`, {
+  const editComment = async (adId, commentId, data) => {
+    return await fetch(`${BASE_URL}/ads/${adId}/comments/update/${commentId}/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -120,8 +120,8 @@ export const MainContextStates = ({ children }) => {
     }).then(handleResponse);
   };
 
-  const deleteComment = async (id, commentId) => {
-    return await fetch(`${BASE_URL}/ads/${id}/comments/delete/${commentId}/`, {
+  const deleteComment = async (adId, commentId) => {
+    return await fetch(`${BASE_URL}/ads/${adId}/comments/delete/${commentId}/`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -208,7 +208,7 @@ export const MainContextStates = ({ children }) => {
       .then(handleResponse);
   };
 
-  //delite add
+  //delete add
   const deleteAdd = async (id) => {
     return await fetch(`${BASE_URL}/ads/delete/${id}/`, {
       method: "DELETE",

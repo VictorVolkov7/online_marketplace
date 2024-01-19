@@ -11,14 +11,14 @@ function CommentList({ comments, setComments, user }) {
           {comments.map((comment) => {
             return (
               <Comment
-                key={comment.pk}
+                key={comment.id}
                 text={comment.text}
-                adId={comment.ad_id}
-                img={comment.author_image}
-                commentId={comment.pk}
-                userId={comment.author_id}
+                adId={comment.ad}
+                img={comment.author.image}
+                commentId={comment.id}
+                userId={comment.author.id}
                 setComments={setComments}
-                authorName={comment.author_first_name}
+                authorName={comment.author.first_name}
                 user={user}
               />
             );
