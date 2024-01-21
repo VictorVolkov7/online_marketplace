@@ -22,4 +22,4 @@ class CurrentUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'phone', 'email', 'image',)
+        fields = ('id', 'first_name', 'last_name', 'phone', 'email', 'image', 'role',)

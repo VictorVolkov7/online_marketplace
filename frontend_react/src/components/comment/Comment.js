@@ -7,17 +7,29 @@ import defaultImg from "../../images/greg-rakozy-oMpAz-DN-9I-unsplash.jpg";
 
 function Comment(comment, { setComments }) {
   const [getComm, setGetComm] = useState({});
+  const [userInfo, setUserInfo] = useState({});
   const [isComPopupOpen, setIsComPopupOpen] = useState(false);
-  const { getComment, deleteComment, editComment } = useContext(MainContext);
+  const { getComment, deleteComment, editComment, getUserInfo } = useContext(MainContext);
   const { user } = useContext(AuthContext);
   const currentCommentid = comment.commentId;
 
   useEffect(() => {
-    getComment(comment.adId, comment.commentId)
-      .then((res) => {
-        setGetComm(res.data);
-      })
-      .catch((error) => console.log("error", error));
+    const fetchCommentAndUserInfo = async () => {
+      try {
+        // Получаем информацию о комментарии
+        const commentResponse = await getComment(comment.adId, comment.commentId);
+        setGetComm(commentResponse.data);
+
+        // Получаем информацию о пользователе
+        const userInfoResponse = await getUserInfo();
+        setUserInfo(userInfoResponse.data);
+      } catch (error) {
+        console.error("Ошибка при получении данных", error);
+      }
+    };
+
+    fetchCommentAndUserInfo();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comment.adId, comment.commentId, comment]);
 
@@ -64,7 +76,7 @@ function Comment(comment, { setComments }) {
       </div>
       <div className="commentBox">
         <p className="comment-text comment-message">{comment.text}</p>
-        {user.user_id === comment.userId ? (
+        {user.user_id === comment.userId || userInfo.role === 'admin' ? (
           <Buttons
             className="comment-buttons"
             classButton="comment-button"
