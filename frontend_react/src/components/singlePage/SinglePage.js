@@ -12,6 +12,7 @@ function SinglePage() {
   const { id } = useParams();
   const [ad, setAd] = useState({});
   const [comments, setComments] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
   let ad_pk = id;
   let { user } = useContext(AuthContext);
   const {
@@ -29,22 +30,39 @@ function SinglePage() {
     addComment,
     editAdd,
     editAddPhoto,
+    getUserInfo,
   } = useContext(MainContext);
   let history = useHistory();
 
   useEffect(() => {
-    if (user) {
-      setIsLoading(true);
-      Promise.all([getComments(ad_pk), getAd(id)])
-        .then(([commentsData, adData]) => {
+    const fetchData = async () => {
+      try {
+        if (user) {
+          setIsLoading(true);
+
+          // Получение информации о пользователе
+          const userInfoResponse = await getUserInfo();
+          setUserInfo(userInfoResponse.data);
+
+          // Получение комментариев и данных объявления параллельно
+          const [commentsData, adData] = await Promise.all([
+            getComments(ad_pk),
+            getAd(id),
+          ]);
+
           setComments(commentsData.data.results);
           setAd(adData.data);
-        })
-        .catch((error) => console.log("ошибка", error))
-        .finally(() => setTimeout(() => setIsLoading(false), 700));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+        }
+      } catch (error) {
+        console.log("Ошибка при получении данных", error);
+      } finally {
+        setTimeout(() => setIsLoading(false), 700);
+      }
+    };
+
+  fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [user]);
 
   function handleEditAdd(data) {
     debugger;
@@ -74,7 +92,6 @@ function SinglePage() {
       })
       .catch((error) => console.log("error", error));
   }
-
   function handleAddComment(data) {
     addComment(id, data)
       .then((newComment) => {
@@ -95,7 +112,7 @@ function SinglePage() {
             <div className="cardInformation__container">
               {ad.image === null ? (
                 <div className="cardInformation__img-null">
-                  {ad.author && user.user_id === ad.author.id ? (
+                  {(ad.author && user.user_id === ad.author.id) || userInfo.role === 'admin' ? (
                     <button
                       onClick={() => handleOpenEditPhotoPopup()}
                       className="cardInformation__img-change"
@@ -108,7 +125,7 @@ function SinglePage() {
                   style={{ backgroundImage: `url(${ad.image})` }}
                   className="cardInformation__img"
                 >
-                  {ad.author && user.user_id === ad.author.id ? (
+                  {(ad.author && user.user_id === ad.author.id) || userInfo.role === 'admin' ? (
                     <button
                       onClick={() => handleOpenEditPhotoPopup()}
                       className="cardInformation__img-change"
@@ -117,7 +134,7 @@ function SinglePage() {
                   ) : null}
                 </div>
               )}
-              {ad.author && user.user_id !== ad.author.id ? null : (
+              {(ad.author && user.user_id === ad.author.id) || userInfo.role === 'admin' ? (
                 <Buttons
                   user={user}
                   product={ad}
@@ -126,9 +143,9 @@ function SinglePage() {
                   classButton="buttons-item"
                   onSubmit={handleDeleteAdd}
                 />
-              )}
+              ): null}
               <div className="cardInformation__box">
-                <p className="cardInformation__price">Цена:{ad.price} &#8381;</p>
+                <p className="cardInformation__price">Цена: {ad.price} &#8381;</p>
               </div>
               <div className="cardInformation__box">
                 <p className="cardInformation__description">{ad.description}</p>
