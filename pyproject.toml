@@ -58,6 +58,7 @@ urllib3 = "^2.1.0"
 psycopg2-binary = "^2.9.9"
 ruamel-yaml = "^0.18.5"
 drf-spectacular = "^0.27.0"
+whitenoise = "^6.6.0"
 
 
 [build-system]
