@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       : null
   );
   let [loading, setLoading] = useState(true);
-  const BASE_URL = "http://127.0.0.1:8001";
+  const BASE_URL = "http://127.0.0.1/api";
 
   const history = useHistory();
   //login

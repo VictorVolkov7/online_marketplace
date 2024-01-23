@@ -16,7 +16,7 @@ export const MainContextStates = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const api = useAxios();
   let { authTokens } = useContext(AuthContext);
-  const BASE_URL = "http://127.0.0.1:8001";
+  const BASE_URL = "http://127.0.0.1/api";
   const BASE_URL_OPEN = `${BASE_URL}/ads/?`;
   const BASE_URL_ADS = `/ads/?`;
 
@@ -166,7 +166,7 @@ export const MainContextStates = ({ children }) => {
 
   //add new ad
   const addAd = async ({ image, title, price, description }) => {
-    const url = "http://127.0.0.1:8001/ads/create/";
+    const url = "http://127.0.0.1/api/ads/create/";
     const formData = new FormData();
     formData.append("image", image);
     formData.append("title", `${title}`);
