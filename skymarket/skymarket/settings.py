@@ -181,17 +181,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8001",  # replace with the address of your backend server
-    "http://localhost:3000",  # replace with the address of your frontend server
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:8000"
+    "http://localhost",
+    "http://127.0.0.1"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8001",  # replace with the address of your backend server
-    "http://localhost:3000",  # replace with the address of your frontend server
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:8000"
+    "http://localhost",
+    "http://127.0.0.1"
 ]
 
 # Default primary key field type

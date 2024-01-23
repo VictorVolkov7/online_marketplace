@@ -9,8 +9,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     # apps routing
-    path('', include('users.urls', namespace='user')),
-    path('', include('ads.urls', namespace='ads')),
+    path('api/', include('users.urls', namespace='user')),
+    path('api/', include('ads.urls', namespace='ads')),
 
     # drf spectacular documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
